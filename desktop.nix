@@ -79,14 +79,14 @@ services.xserver = {
   exportConfiguration = true;
 
   # use the touch-pad for scrolling
-  # libinput = {
-  #  enable = true;
-  #  disableWhileTyping = true;
-  #  naturalScrolling = false; # reverse scrolling
-  #  scrollMethod = "twofinger";
-  #  tapping = true;
-  #  tappingDragLock = false;
-  # };
+  libinput = {
+   enable = true;
+   disableWhileTyping = true;
+   naturalScrolling = false; # reverse scrolling
+   scrollMethod = "twofinger";
+   tapping = true;
+   tappingDragLock = false;
+  };
 
   # consensus is that libinput gives better results
   synaptics.enable = true;

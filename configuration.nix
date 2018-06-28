@@ -8,8 +8,9 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      <nixpkgs/nixos/modules/profiles/all-hardware.nix>
-      ./desktop.nix
+      # <nixpkgs/nixos/modules/profiles/all-hardware.nix>
+      <nixpkgs/nixos/modules/installer//cd-dvd/installatio-cd-kde.nix>
+      # ./desktop.nix
     ];
 
   hardware.cpu.intel.updateMicrocode = true;
