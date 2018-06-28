@@ -9,7 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       # <nixpkgs/nixos/modules/profiles/all-hardware.nix>
-      <nixpkgs/nixos/modules/installer//cd-dvd/installatio-cd-kde.nix>
+      # <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-graphical-kde-new-kernel.nix>
       # ./desktop.nix
     ];
 
