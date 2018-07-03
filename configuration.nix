@@ -13,6 +13,7 @@
       # ./desktop.nix
     ];
 
+
   hardware.cpu.intel.updateMicrocode = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
@@ -120,6 +121,18 @@
 
 
   services = {
+
+    xserver.enable = false;
+    xserver.layout = "gb";
+    #     xserver.xkbOptions = "eurosign:e";
+
+    # Enable touchpad support.
+    # xserver.libinput.enable = true;
+
+    # Enable the KDE Desktop Environment.
+    # xserver.displayManager.sddm.enable = true;
+    # xserver.desktopManager.plasma5.enable = true;
+
     acpid = {
       enable = true;
       powerEventCommands = ''
