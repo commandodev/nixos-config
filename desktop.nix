@@ -89,7 +89,7 @@ services.xserver = {
   };
 
   # consensus is that libinput gives better results
-  synaptics.enable = true;
+  synaptics.enable = false;
 
   # config = ''
   #    Section "InputClass"
