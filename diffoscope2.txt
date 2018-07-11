@@ -1,3 +1,4 @@
+diffoscope /nix/store/0ggrn2lsnpqwbw734c237188dwpawkdc-firmware/lib/firmware/ /nix/store/b30kp5l2g1nygm9qbg840sfbjsp9ds46-firmware/lib/firmware/
 --- /nix/store/0ggrn2lsnpqwbw734c237188dwpawkdc-firmware/lib/firmware/
 +++ /nix/store/b30kp5l2g1nygm9qbg840sfbjsp9ds46-firmware/lib/firmware/
 ├── file list
@@ -12,4 +13,4 @@
 │ -yamaha
 │ +yamaha
 │ +zd1211
-diffoscope /nix/store/0ggrn2lsnpqwbw734c237188dwpawkdc-firmware/lib/firmware/ /nix/store/b30kp5l2g1nygm9qbg840sfbjsp9ds46-firmware/lib/firmware/
+
