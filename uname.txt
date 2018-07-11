@@ -1,0 +1,1 @@
+Linux xps15 4.16.0-rc4 #1-NixOS SMP Sun Mar 4 22:54:11 UTC 2018 x86_64 GNU/Linux
