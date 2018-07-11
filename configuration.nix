@@ -10,25 +10,27 @@
       ./hardware-configuration.nix
       # <nixpkgs/nixos/modules/profiles/all-hardware.nix>
       # <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-graphical-kde-new-kernel.nix>
-      # ./desktop.nix
+      ./desktop.nix
     ];
 
 
-  hardware.cpu.intel.updateMicrocode = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # hardware.cpu.intel.updateMicrocode = true;
+  # hardware.nvidiaOptimus.disable = true;
+  boot.kernelPackages = pkgs.linuxPackages_testing;
 
-  # Use the systemd-boot EFI boot loader.
+  # # Use the systemd-boot EFI boot loader.
+  # boot.kernelParams = [ "acpi_rev_override=5" ];
   boot.loader = {
     systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
-    efi.efiSysMountPoint = "/boot";
-    grub.device = "nodev";
-    grub.enable = true;
-    grub.efiSupport = true;
-    #grub.efiInstallAsRemovable = true;
-    grub.fsIdentifier = "uuid";
-    grub.gfxmodeEfi = "auto";
-    grub.version = 2;
+  #   # efi.efiSysMountPoint = "/boot";
+  #   # grub.device = "nodev";
+  #   # grub.enable = true;
+  #   # grub.efiSupport = true;
+  #   # #grub.efiInstallAsRemovable = true;
+  #   # grub.fsIdentifier = "uuid";
+  #   # grub.gfxmodeEfi = "auto";
+  #   # grub.version = 2;
   };
   networking = {
     hostName = "xps15"; # Define your hostname.
@@ -101,11 +103,11 @@
     allowBroken = true;
     firefox = {
       enableGoogleTalkPlugin = true;
-      enableAdobeFlash = true;
+      # enableAdobeFlash = true;
     };
 
     chromium = {
-      enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
+      # enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
       enablePepperPDF = true;
     };
    };
@@ -122,8 +124,9 @@
 
   services = {
 
-    xserver.enable = false;
-    xserver.layout = "gb";
+    # xserver.videoDrivers = [ "nvidia" ];
+    # xserver.enable = true;
+    # xserver.layout = "gb";
     #     xserver.xkbOptions = "eurosign:e";
 
     # Enable touchpad support.
@@ -133,43 +136,43 @@
     # xserver.displayManager.sddm.enable = true;
     # xserver.desktopManager.plasma5.enable = true;
 
-    acpid = {
-      enable = true;
-      powerEventCommands = ''
-          systemctl suspend
-        '';
-      lidEventCommands = ''
-          systemctl hibernate
-        '';
-    };
+    # acpid = {
+    #   enable = true;
+    #   powerEventCommands = ''
+    #       systemctl suspend
+    #     '';
+    #   lidEventCommands = ''
+    #       systemctl hibernate
+    #     '';
+    # };
 
-    # CUPS printing
-    printing = {
-      enable = true;
-      drivers = [ pkgs.hplipWithPlugin ];
-    };
+    # # CUPS printing
+    # printing = {
+    #   enable = true;
+    #   drivers = [ pkgs.hplipWithPlugin ];
+    # };
 
-    redshift = {
-       enable = true;
-       latitude = "51.5072";
-       longitude = "0.1275";
-       temperature = {
-         night = 4000;
-       };
-     };
-    compton = {
-      enable = true;
-      fade = true;
-    };
+    # redshift = {
+    #    enable = true;
+    #    latitude = "51.5072";
+    #    longitude = "0.1275";
+    #    temperature = {
+    #      night = 4000;
+    #    };
+    #  };
+    # compton = {
+    #   enable = true;
+    #   fade = true;
+    # };
 
-    locate.enable = true;
-    fprintd.enable = true; # finger-print daemon and PAM module
+    # locate.enable = true;
+    # fprintd.enable = true; # finger-print daemon and PAM module
 
-    syncthing = {
-      enable = false;
-      user = "ben";
-      dataDir = "/home/ben/syncthing";
-    };
+    # syncthing = {
+    #   enable = false;
+    #   user = "ben";
+    #   dataDir = "/home/ben/syncthing";
+    # };
 
     # apache-kafka = {
     #   enable = false;
@@ -186,7 +189,7 @@
     enableFontDir = true;
     enableGhostscriptFonts = true;
     fonts = with pkgs; [
-      corefonts  # Micrsoft free fonts
+      # corefonts  # Micrsoft free fonts
       inconsolata  # monospaced
       ubuntu_font_family  # Ubuntu fonts
       source-code-pro
