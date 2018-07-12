@@ -58,7 +58,7 @@ fonts = {
     };
   };
 
-  hardware.opengl.driSupport32Bit = true;
+hardware.opengl.enable = false;
 
 services.accounts-daemon.enable = true; # needed by lightdm
 
@@ -113,6 +113,14 @@ services.xserver = {
       ];
     };
   };
+
+  desktopManager = {
+    default = "gnome3";
+    gnome3 = {
+      enable = true;
+    };
+  };
+
   displayManager.lightdm = {
    enable = true;
    autoLogin = {
@@ -130,72 +138,73 @@ services.xserver = {
     DisplaySize 406 228
   ''; 
 
-  # displayManager.sessionCommands = ''
-  #    ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
+  displayManager.sessionCommands = ''
+     ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
 
-  #    ${pkgs.xlibs.xrdb}/bin/xrdb -merge ~/.Xresources
-  #    # ${pkgs.xlibs.xrdb}/bin/xrdb -merge /etc/X11/Xresources
+     ${pkgs.xlibs.xrdb}/bin/xrdb -merge ~/.Xresources
+     # ${pkgs.xlibs.xrdb}/bin/xrdb -merge /etc/X11/Xresources
 
-  #    [ -f ~/.Xmodmap ] && xmodmap ~/.Xmodmap
+     [ -f ~/.Xmodmap ] && xmodmap ~/.Xmodmap
 
-  #    # background image - nitrogen has better multihead support than feh
-  #    ${pkgs.nitrogen}/bin/nitrogen --restore
+     # background image - nitrogen has better multihead support than feh
+     ${pkgs.nitrogen}/bin/nitrogen --restore
 
-  #    # Subscribes to the systemd events and invokes i3lock.
-  #    # Send notification after 10 mins of inactivity,
-  #    # lock the screen 10 seconds later.
-  #    # TODO nixify xss-lock scripts
-  #    ${pkgs.xlibs.xset}/bin/xset s 600 10
-  #    ${pkgs.xss-lock}/bin/xss-lock -n ~/bin/lock-notify.sh -- ~/bin/lock.sh &
+     # Subscribes to the systemd events and invokes i3lock.
+     # Send notification after 10 mins of inactivity,
+     # lock the screen 10 seconds later.
+     # TODO nixify xss-lock scripts
+     ${pkgs.xlibs.xset}/bin/xset s 600 10
+     ${pkgs.xss-lock}/bin/xss-lock -n ~/bin/lock-notify.sh -- ~/bin/lock.sh &
 
-  #    # disable PC speaker beep
-  #    # ${pkgs.xlibs.xset}/bin/xset -b
+     # disable PC speaker beep
+     # ${pkgs.xlibs.xset}/bin/xset -b
 
-  #    # gpg-agent for X session
-  #    gpg-connect-agent /bye
-  #    GPG_TTY=$(tty)
-  #    export GPG_TTY
+     # gpg-agent for X session
+     gpg-connect-agent /bye
+     GPG_TTY=$(tty)
+     export GPG_TTY
 
-  #    # use gpg-agent for SSH
-  #    # NOTE: make sure enable-ssh-support is included in ~/.gnupg/gpg-agent.conf
-  #    unset SSH_AGENT_PID
-  #    export SSH_AUTH_SOCK="/run/user/1000/gnupg/S.gpg-agent.ssh"
-  # '';
+     # use gpg-agent for SSH
+     # NOTE: make sure enable-ssh-support is included in ~/.gnupg/gpg-agent.conf
+     unset SSH_AGENT_PID
+     export SSH_AUTH_SOCK="/run/user/1000/gnupg/S.gpg-agent.ssh"
+  '';
 };
 
-# environment.extraInit = ''
-#   ${themeEnv}
+environment.extraInit = ''
+  ${themeEnv}
 
-#   # these are the defaults, but some applications are buggy so we set them
-#   # here anyway
-#   export XDG_CONFIG_HOME=$HOME/.config
-#   export XDG_DATA_HOME=$HOME/.local/share
-#   export XDG_CACHE_HOME=$HOME/.cache
-# '';
+  # these are the defaults, but some applications are buggy so we set them
+  # here anyway
+  export XDG_CONFIG_HOME=$HOME/.config
+  export XDG_DATA_HOME=$HOME/.local/share
+  export XDG_CACHE_HOME=$HOME/.cache
+'';
 
 # QT4/5 global theme
-# environment.etc."xdg/Trolltech.conf" = {
-#   text = ''
-#     [Qt]
-#     style=Breeze
-#   '';
-#   mode = "444";
-# };
+environment.etc."xdg/Trolltech.conf" = {
+  text = ''
+    [Qt]
+    style=Breeze
+  '';
+  mode = "444";
+};
 
 # GTK3 global theme (widget and icon theme)
-# environment.etc."xdg/gtk-3.0/settings.ini" = {
-#   text = ''
-#     [Settings]
-#     gtk-icon-theme-name=breeze
-#     gtk-theme-name=Breeze-gtk
-#   '';
-#   mode = "444";
-# };
+environment.etc."xdg/gtk-3.0/settings.ini" = {
+  text = ''
+    [Settings]
+    gtk-icon-theme-name=breeze
+    gtk-theme-name=Breeze-gtk
+  '';
+  mode = "444";
+};
 
 environment.systemPackages = with pkgs; [
   dmenu
   dunst
   fontconfig
+  konsole
   polybar
   libnotify
   xfontsel
@@ -221,24 +230,24 @@ environment.systemPackages = with pkgs; [
   xlibs.xprop
 
   # # GTK theme
-  # breeze-gtk
-  # gnome-breeze
-  # gnome3.gnome_themes_standard
+  breeze-gtk
+  gnome-breeze
+  gnome3.gnome_themes_standard
 
   # # Qt theme
-  # breeze-qt5
+  breeze-qt5
 
   # # Icons (Main)
-  # iconTheme
+  iconTheme
 
   # # Icons (Fallback)
-  # oxygen-icons5
-  # gnome3.adwaita-icon-theme
-  # hicolor_icon_theme
+  oxygen-icons5
+  gnome3.adwaita-icon-theme
+  hicolor_icon_theme
 
   # These packages are used in autostart, they need to in systemPackages
   # or icons won't work correctly
-  # pythonPackages.udiskie connman-notify # skype
+  pythonPackages.udiskie connman-notify # skype
 
 ];
 

@@ -19,7 +19,7 @@
   boot.kernelPackages = pkgs.linuxPackages_testing;
 
   # # Use the systemd-boot EFI boot loader.
-  # boot.kernelParams = [ "acpi_rev_override=5" ];
+  boot.kernelParams = [ "acpi_rev_override=1" "pcie_aspm=off" "nouveau.modeset=0" ];
   boot.loader = {
     systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
@@ -124,55 +124,44 @@
 
   services = {
 
-    # xserver.videoDrivers = [ "nvidia" ];
-    # xserver.enable = true;
-    # xserver.layout = "gb";
-    #     xserver.xkbOptions = "eurosign:e";
-
-    # Enable touchpad support.
-    # xserver.libinput.enable = true;
-
-    # Enable the KDE Desktop Environment.
-    # xserver.displayManager.sddm.enable = true;
-    # xserver.desktopManager.plasma5.enable = true;
-
-    # acpid = {
-    #   enable = true;
-    #   powerEventCommands = ''
-    #       systemctl suspend
-    #     '';
-    #   lidEventCommands = ''
-    #       systemctl hibernate
-    #     '';
-    # };
+    acpid = {
+      enable = true;
+      powerEventCommands = ''
+          systemctl suspend
+        '';
+      lidEventCommands = ''
+          systemctl hibernate
+        '';
+    };
 
     # # CUPS printing
-    # printing = {
-    #   enable = true;
-    #   drivers = [ pkgs.hplipWithPlugin ];
-    # };
+    printing = {
+      enable = true;
+      drivers = [ pkgs.hplipWithPlugin ];
+    };
 
-    # redshift = {
-    #    enable = true;
-    #    latitude = "51.5072";
-    #    longitude = "0.1275";
-    #    temperature = {
-    #      night = 4000;
-    #    };
-    #  };
+    redshift = {
+       enable = true;
+       latitude = "51.5072";
+       longitude = "0.1275";
+       temperature = {
+         night = 4000;
+       };
+     };
     # compton = {
     #   enable = true;
     #   fade = true;
     # };
 
-    # locate.enable = true;
-    # fprintd.enable = true; # finger-print daemon and PAM module
+    openssh.enable = true;
+    locate.enable = true;
+    fprintd.enable = true; # finger-print daemon and PAM module
 
-    # syncthing = {
-    #   enable = false;
-    #   user = "ben";
-    #   dataDir = "/home/ben/syncthing";
-    # };
+    syncthing = {
+      enable = true;
+      user = "ben";
+      dataDir = "/home/ben/syncthing";
+    };
 
     # apache-kafka = {
     #   enable = false;
@@ -207,17 +196,11 @@
     shell = pkgs.zsh;
    };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.extraUsers.guest = {
-  #   isNormalUser = true;
-  #   uid = 1000;
-  # };
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
   system.stateVersion = "18.03"; # Did you read the comment?
-  
 
 }
