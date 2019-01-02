@@ -4,13 +4,18 @@
 
 { config, pkgs, ... }:
 
+let
+  secrets = import ./secrets.nix;
+in
 {
+  disabledModules = [ "services/networking/zerotierone.nix" ];
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       # <nixpkgs/nixos/modules/profiles/all-hardware.nix>
       # <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-graphical-kde-new-kernel.nix>
       ./desktop.nix
+      ./zerotierone.nix
     ];
 
 
@@ -182,6 +187,11 @@
     # zookeeper = {
     #   enable = false;
     # };
+    zerotierone = {
+      enable = true;
+      package = pkgs.callPackage "/home/ben/dev/nixpkgs/pkgs/tools/networking/zerotierone" {};
+      joinNetworks = secrets.ztNetworks;
+    };
   };
 
 
