@@ -11,12 +11,9 @@ let
   secrets = import ./secrets.nix;
 in
 {
-  disabledModules = [ "services/networking/zerotierone.nix" ];
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
-      # <nixpkgs/nixos/modules/profiles/all-hardware.nix>
-      # <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-graphical-kde-new-kernel.nix>
       ./common.nix
     ];
 

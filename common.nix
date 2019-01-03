@@ -16,14 +16,20 @@ in
     ];
 
   nix = {
-    binaryCaches = [ http://hydra.iohk.io http://cache.nixos.org http://hydra.nixos.org ];
+    binaryCaches = [
+      http://hydra.iohk.io
+      http://cache.nixos.org
+      http://hydra.nixos.org
+      https://hie-nix.cachix.org
+    ];
     extraOptions = ''
-      build-cores = 8
       auto-optimise-store = true
     '';
     trustedBinaryCaches = [ http://hydra.iohk.io http://hydra.nixos.org ];
     binaryCachePublicKeys = [
-      "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "hie-nix.cachix.org-1:EjBSHzF6VmDnzqlldGXbi0RM3HdjfTU3yDRi9Pd0jTY="
     ];
   };
 
@@ -54,6 +60,9 @@ in
     fish
     gitAndTools.gitFull
     gitAndTools.tig
+    gnome3.gnome-screenshot
+    google-chrome-stable
+    gnumake
     haskellPackages.ghc
     haskellPackages.xmonad
     haskellPackages.xmonad
@@ -69,7 +78,9 @@ in
     oh-my-zsh
     perf-tools
     polkit_gnome
+    pstree
     pwgen
+    python27Packages.pygments
     s3cmd
     silver-searcher
     terminator
@@ -78,36 +89,42 @@ in
   ];
 
   # Select internationalisation properties.
-  # i18n = {
-  #   consoleFont = "Lat2-Terminus16";
-  #   consoleKeyMap = "us";
-  #   defaultLocale = "en_US.UTF-8";
-  # };
+  i18n = {
+    consoleFont = "lat9w-16";
+    consoleKeyMap = "uk";
+    defaultLocale = "en_GB.UTF-8";
+  };
   nixpkgs.config = {
     allowUnfree = true;
     allowBroken = true;
     firefox = {
       enableGoogleTalkPlugin = true;
-      # enableAdobeFlash = true;
+      enableAdobeFlash = true;
     };
 
     chromium = {
-      # enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
+      enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
       enablePepperPDF = true;
     };
    };
 
   time.timeZone = "Europe/London";
 
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  programs.bash.enableCompletion = true;
-  programs.mtr.enable = true;
-  programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+  programs = {
+    bash.enableCompletion = true;
+    gnupg.agent = { enable = true; enableSSHSupport = true; };
+    mtr.enable = true;
+    ssh.startAgent = true;
+    zsh = { enable = true; autosuggestions = true; };
+  };
 
 
   services = {
+
+    openssh.enable = true;
+    locate.enable = true;
+    fprintd.enable = true; # finger-print daemon and PAM module
+    keybase.enable = true;
 
     acpid = {
       enable = true;
@@ -115,6 +132,29 @@ in
           systemctl suspend
         '';
     };
+
+    postgresql = {
+      enable = true;
+      enableTCPIP = true;
+      package = pkgs.postgresql93;
+      authentication = pkgs.lib.mkForce ''
+        host     all    all    127.0.0.1/32    trust
+        host     all    all    ::1/128         trust
+        host     all    all    0.0.0.0/0       md5
+        local    all    all                    trust
+      '';
+      extraConfig = ''
+        maintenance_work_mem = 64MB
+        checkpoint_segments = 16
+        work_mem = 128MB
+        shared_buffers = 512MB
+        effective_cache_size = 4GB
+        log_statement = all
+        log_line_prefix = '[%p] [%c]: '
+      '';
+      # extraPlugins = [ pkgs.postgis.v_2_1_3 ];
+    };
+
 
     # # CUPS printing
     printing = {
@@ -130,14 +170,6 @@ in
          night = 4000;
        };
      };
-    # compton = {
-    #   enable = true;
-    #   fade = true;
-    # };
-
-    openssh.enable = true;
-    locate.enable = true;
-    fprintd.enable = true; # finger-print daemon and PAM module
 
     syncthing = {
       enable = true;
@@ -145,14 +177,6 @@ in
       dataDir = "/home/ben/syncthing";
     };
 
-    # apache-kafka = {
-    #   enable = false;
-    #   brokerId = 1;
-    # };
-
-    # zookeeper = {
-    #   enable = false;
-    # };
     zerotierone = {
       enable = true;
       package = pkgs.callPackage "/home/ben/dev/nixpkgs/pkgs/tools/networking/zerotierone" {};
@@ -183,6 +207,10 @@ in
     shell = pkgs.zsh;
    };
 
+  virtualisation = {
+    docker.enable = true;
+    virtualbox.host.enable = true;
+  };
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
