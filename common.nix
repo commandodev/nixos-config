@@ -10,41 +10,10 @@ in
 {
   disabledModules = [ "services/networking/zerotierone.nix" ];
   imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      # <nixpkgs/nixos/modules/profiles/all-hardware.nix>
-      # <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-graphical-kde-new-kernel.nix>
+    [
       ./desktop.nix
-      ./zerotierone.nix
+      ./package/zerotierone.nix
     ];
-
-
-  # hardware.cpu.intel.updateMicrocode = true;
-  # hardware.nvidiaOptimus.disable = true;
-  boot.kernelPackages = pkgs.linuxPackages_testing;
-
-  # # Use the systemd-boot EFI boot loader.
-  boot.kernelParams = [ "acpi_rev_override=1" "pcie_aspm=off" "nouveau.modeset=0" ];
-  boot.loader = {
-    systemd-boot.enable = true;
-    efi.canTouchEfiVariables = true;
-  #   # efi.efiSysMountPoint = "/boot";
-  #   # grub.device = "nodev";
-  #   # grub.enable = true;
-  #   # grub.efiSupport = true;
-  #   # #grub.efiInstallAsRemovable = true;
-  #   # grub.fsIdentifier = "uuid";
-  #   # grub.gfxmodeEfi = "auto";
-  #   # grub.version = 2;
-  };
-  networking = {
-    hostName = "xps15"; # Define your hostname.
-    wireless.enable = false;
-    enableIPv6 = false;
-    # connman.enable = true;
-    networkmanager.enable = true;
-
-  };
 
   nix = {
     binaryCaches = [ http://hydra.iohk.io http://cache.nixos.org http://hydra.nixos.org ];
@@ -133,9 +102,9 @@ in
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
-  # programs.bash.enableCompletion = true;
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+  programs.bash.enableCompletion = true;
+  programs.mtr.enable = true;
+  programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
 
   services = {
@@ -144,9 +113,6 @@ in
       enable = true;
       powerEventCommands = ''
           systemctl suspend
-        '';
-      lidEventCommands = ''
-          systemctl hibernate
         '';
     };
 

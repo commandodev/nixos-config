@@ -47,9 +47,12 @@ fonts = {
     enableGhostscriptFonts = true;
     fonts = [
        pkgs.corefonts
-       pkgs.ttf_bitstream_vera
-       pkgs.vistafonts          # e.g. consolas
        pkgs.font-awesome-ttf    # needed by my i3 config!
+       pkgs.inconsolata
+       pkgs.ttf_bitstream_vera
+       pkgs.ubuntu_font_family  # Ubuntu fonts
+       pkgs.ubuntu_font_family  # Ubuntu fonts
+       pkgs.vistafonts          # e.g. consolas
        # pkgs.source-code-pro
     ];
     fontconfig = {
@@ -58,49 +61,17 @@ fonts = {
     };
   };
 
-hardware.opengl.enable = false;
-
 services.accounts-daemon.enable = true; # needed by lightdm
 
-# Required for our screen-lock-on-suspend functionality
-services.logind.extraConfig = ''
-   LidSwitchIgnoreInhibited=False
-   HandleLidSwitch=suspend
-   HoldoffTimeoutSec=10
-'';
 
 # Enable the X11 windowing system.
 services.xserver = {
   enable = true;
-  # useGlamor = true;
-
+  useGlamor = true;
   layout = "gb";
   autorun = true;
   exportConfiguration = true;
-
-  # use the touch-pad for scrolling
-  libinput = {
-   enable = true;
-   disableWhileTyping = true;
-   naturalScrolling = false; # reverse scrolling
-   scrollMethod = "twofinger";
-   tapping = true;
-   tappingDragLock = false;
-  };
-
-  # consensus is that libinput gives better results
-  synaptics.enable = false;
-
-  # config = ''
-  #    Section "InputClass"
-  #      Identifier     "Enable libinput for TrackPoint"
-  #      MatchIsPointer "on"
-  #      Driver         "libinput"
-  #      Option         "ScrollMethod" "button"
-  #      Option         "ScrollButton" "8"
-  #    EndSection
-  #  '';
-
+  xkbOptions = "eurosign:e";
   windowManager = {
     default = "xmonad";
     xmonad = {
@@ -130,13 +101,6 @@ services.xserver = {
   };
   # videoDrivers = [ "nvidia" ];
   # videoDrivers = [ "nouveau" ];
-  deviceSection = ''
-    Option "DRI" "3"
-    Option "TearFree" "true"
-  '';
-  monitorSection = ''
-    DisplaySize 406 228
-  ''; 
 
   displayManager.sessionCommands = ''
      ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
@@ -251,9 +215,6 @@ environment.systemPackages = with pkgs; [
 
 ];
 
-# needed by mendeley
-# services.dbus.packages = [ pkgs.gnome3.gconf.out ];
-
 # Make applications find files in <prefix>/share
 environment.pathsToLink = [ "/share" "/etc/gconf" ];
 
@@ -267,11 +228,5 @@ services.udev = {
     '';
  };
 sound.mediaKeys.enable = true;
-services.actkbd.bindings = [
-    { keys = [ 224 ]; events = [ "key" "rep" ]; command = "${pkgs.light}/bin/light -U 4"; }
-    { keys = [ 225 ]; events = [ "key" "rep" ]; command = "${pkgs.light}/bin/light -A 4"; }
-    { keys = [ 229 ]; events = [ "key" "rep" ]; command = "${pkgs.kbdlight}/bin/kbdlight down"; }
-    { keys = [ 230 ]; events = [ "key" "rep" ]; command = "${pkgs.kbdlight}/bin/kbdlight up"; }
-  ];
 
 }
