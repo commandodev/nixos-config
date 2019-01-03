@@ -1,0 +1,26 @@
+IMAPAccount ben-gmail
+Host imap.gmail.com
+User ben.fordnz@gmail.com
+SSLType IMAPS
+SSLVersions TLSv1.2
+PassCmd "@lpCli@/bin/lpass show --password auto/gmail"
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+
+IMAPStore ben-gmail-remote
+Account ben-gmail
+
+MaildirStore ben-gmail-local
+# The trailing "/" is important
+Path ~/.mail/ben-gmail/
+Inbox ~/.mail/ben-gmail/Inbox
+SubFolders Verbatim
+
+Channel ben-gmail
+Master :ben-gmail-remote:
+Slave :ben-gmail-local:
+Patterns *
+# Automatically create missing mailboxes, both locally and on the server
+Create Both
+# Save the synchronization state files in the relevant directory
+SyncState *
