@@ -27,6 +27,10 @@ in
 
   networking = {
     hostName = "xps15"; # Define your hostname.
+    extraHosts = ''
+      127.0.0.1 ${config.networking.hostName}
+      10.147.17.21 office
+    '';
     wireless.enable = false;
     enableIPv6 = false;
     # connman.enable = true;
