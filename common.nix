@@ -15,6 +15,9 @@ in
       ./packages/zerotierone.nix
     ];
 
+  networking = {
+    firewall.allowPing = true;
+  };
   nix = {
     binaryCaches = [
       http://hydra.iohk.io
@@ -175,6 +178,7 @@ in
       enable = true;
       user = "ben";
       dataDir = "/home/ben/syncthing";
+      openDefaultPorts = true;
     };
 
     zerotierone = {

@@ -26,9 +26,8 @@
     useDHCP = true;
     # nameservers = [ "8.8.8.8" "192.168.0.1" ];
     networkmanager.enable = false;
-    firewall.allowPing = true;
-    firewall.allowedTCPPorts = [ 2003 3000 8005 8080 22 443 80 445 139 631];
-    firewall.allowedUDPPorts = [ 2003 137 138 631];
+    firewall.allowedTCPPorts = [ 2003 3000 8005 8080 22 443 80 445 139 631 ];
+    firewall.allowedUDPPorts = [ 2003 137 138 631 ];
   };
 
   # Select internationalisation properties.
