@@ -9,9 +9,30 @@ let
 in
 {
   disabledModules = [ "services/networking/zerotierone.nix" ];
+  nixpkgs = {
+    system = "x86_64-linux";
+    overlays = [
+      (import ./packages/overlay.nix { inherit secrets config; })
+    ];
+    config = {
+      allowUnfree = true;
+      allowBroken = true;
+      firefox = {
+        enableGoogleTalkPlugin = true;
+        # enableAdobeFlash = true;
+      };
+
+      chromium = {
+        # enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
+        enablePepperPDF = true;
+      };
+    };
+
+  };
   imports =
     [
       ./desktop.nix
+      ./packages/services.nix
       ./packages/zerotierone.nix
     ];
 
@@ -76,6 +97,7 @@ in
     iotop
     iptables
     networkmanagerapplet
+    mu
     nix-repl
     nox
     oh-my-zsh
@@ -97,19 +119,14 @@ in
     consoleKeyMap = "uk";
     defaultLocale = "en_GB.UTF-8";
   };
-  nixpkgs.config = {
-    allowUnfree = true;
-    allowBroken = true;
-    firefox = {
-      enableGoogleTalkPlugin = true;
-      # enableAdobeFlash = true;
-    };
 
-    chromium = {
-      # enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
-      enablePepperPDF = true;
+  hardware = {
+    u2f.enable = true;
+    pulseaudio = {
+      enable = true;
+      package = pkgs.pulseaudioFull;
     };
-   };
+  };
 
   time.timeZone = "Europe/London";
 
@@ -120,7 +137,6 @@ in
     # ssh.startAgent = true;
     zsh.enable = true;
   };
-
 
   services = {
 
@@ -209,7 +225,19 @@ in
     extraGroups = [ "wheel" "vboxusers" "docker" "networkmanager" ];
     home = "/home/ben";
     shell = pkgs.zsh;
+    symlinks = {
+      # ".bashrc" = pkgs.bash-config;
+      # ".zshrc" = pkgs.zsh-config;
+      # ".background-image" = "${pkgs.nixos-artwork.wallpapers.gnome-dark}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png";
+      ".mbsyncrc" = pkgs.email.mbsyncrc;
+      ".msmtprc" = pkgs.email.msmtprc;
+      ".notmuch-config" = pkgs.email.notmuch-config;
+      # ".gitconfig" = pkgs.gitconfig;
+      ".gnupg/gpg.conf" = pkgs.gnupgconfig.gpgconf;
+      ".gnupg/scdaemon.conf" = pkgs.gnupgconfig.scdaemonconf;
+      ".spc" = pkgs.spacemacs.dotSpacemacs;
    };
+  };
 
   virtualisation = {
     docker.enable = true;

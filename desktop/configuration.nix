@@ -5,6 +5,9 @@
 { config, pkgs, ... }:
 
 {
+
+  programs.spacemacsFontSize = 15;
+
   imports =
     [
       ./hardware-configuration.nix
