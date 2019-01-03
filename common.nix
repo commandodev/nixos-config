@@ -61,7 +61,7 @@ in
     gitAndTools.gitFull
     gitAndTools.tig
     gnome3.gnome-screenshot
-    google-chrome-stable
+    google-chrome
     gnumake
     haskellPackages.ghc
     haskellPackages.xmonad
@@ -99,11 +99,11 @@ in
     allowBroken = true;
     firefox = {
       enableGoogleTalkPlugin = true;
-      enableAdobeFlash = true;
+      # enableAdobeFlash = true;
     };
 
     chromium = {
-      enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
+      # enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
       enablePepperPDF = true;
     };
    };
@@ -114,8 +114,8 @@ in
     bash.enableCompletion = true;
     gnupg.agent = { enable = true; enableSSHSupport = true; };
     mtr.enable = true;
-    ssh.startAgent = true;
-    zsh = { enable = true; autosuggestions = true; };
+    # ssh.startAgent = true;
+    zsh.enable = true;
   };
 
 
