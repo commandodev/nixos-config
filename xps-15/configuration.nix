@@ -17,7 +17,7 @@ in
       ./hardware-configuration.nix
       # <nixpkgs/nixos/modules/profiles/all-hardware.nix>
       # <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-graphical-kde-new-kernel.nix>
-      ../common.nix
+      ./common.nix
     ];
 
   boot.kernelPackages = pkgs.linuxPackages_testing;

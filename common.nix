@@ -12,7 +12,7 @@ in
   imports =
     [
       ./desktop.nix
-      ./package/zerotierone.nix
+      ./packages/zerotierone.nix
     ];
 
   nix = {
