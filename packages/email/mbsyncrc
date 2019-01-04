@@ -6,15 +6,40 @@ SSLVersions TLSv1.2
 PassCmd "@lpCli@/bin/lpass show --password auto/gmail"
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
+IMAPAccount perurbis
+Host imap.gmail.com
+User ben@perurbis.com
+SSLType IMAPS
+SSLVersions TLSv1.2
+PassCmd "@lpCli@/bin/lpass show --password auto/perurbis"
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 
 IMAPStore ben-gmail-remote
 Account ben-gmail
+
+IMAPStore perurbis-remote
+Account perurbis
 
 MaildirStore ben-gmail-local
 # The trailing "/" is important
 Path ~/.mail/ben-gmail/
 Inbox ~/.mail/ben-gmail/Inbox
 SubFolders Verbatim
+
+MaildirStore perurbis-local
+# The trailing "/" is important
+Path ~/.mail/perurbis/
+Inbox ~/.mail/perurbis/Inbox
+SubFolders Verbatim
+
+Channel perurbis
+Master :perurbis-remote:
+Slave :perurbis-local:
+Patterns *
+# Automatically create missing mailboxes, both locally and on the server
+Create Both
+# Save the synchronization state files in the relevant directory
+SyncState *
 
 Channel ben-gmail
 Master :ben-gmail-remote:

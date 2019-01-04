@@ -1,0 +1,1 @@
+set sendmail=@msmtp@/bin/msmtp
