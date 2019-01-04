@@ -4,13 +4,10 @@
 
 { config, pkgs, ... }:
 
-# from desktop
-
-
-let
-  secrets = import ./secrets.nix;
-in
 {
+
+  programs.spacemacsFontSize = 22;
+
   imports =
     [
       ./hardware-configuration.nix
