@@ -1,6 +1,6 @@
-{ config, mutate, mu, isync }:
+{ config, mutate, mu, isync, msmtp }:
 {
   dotSpacemacs = mutate ./spacemacs {
-    inherit mu isync; fontSize = config.programs.spacemacsFontSize;
+    inherit mu isync msmtp; fontSize = config.programs.spacemacsFontSize;
   };
 }

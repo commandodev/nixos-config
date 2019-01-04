@@ -6,7 +6,7 @@
 
 {
 
-  programs.spacemacsFontSize = 15;
+  programs.spacemacsFontSize = 12;
 
   imports =
     [

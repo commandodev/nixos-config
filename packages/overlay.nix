@@ -32,7 +32,7 @@ in {
   dunst_config = self.callPackage ./dunst { };
 
   email = self.callPackage ./email { };
-  spacemacs = self.callPackage ./spacemacs { };
+  spacemacs = self.callPackage ./spacemacs { inherit config; };
 
   direnv-hook = self.callPackage ./direnv-hook { };
 

@@ -79,6 +79,14 @@ values."
            mu4e-use-maildirs-extension t
            mu4e-enable-async-operations t
            mu4e-enable-notifications t
+           mu4e-maildir "~/.mail"
+           mu4e-drafts-folder "/drafts"
+           mu4e-sent-folder "/sent"
+           mu4e-sent-messages-behavior 'delete
+           mu4e-trash-folder "/trash"
+           mu4e-refile-folder "/archive"
+           mu4e-update-interval nil
+           mu4e-compose-signature-auto-include nil
            mu4e-get-mail-command "@isync@/bin/mbsync -a")
      nixos
      yaml
@@ -224,7 +232,9 @@ values."
    ;; (default 'bottom)
    dotspacemacs-which-key-position 'bottom
    ;; If non nil a progress bar is displayed when spacemacs is loading. This
-   ;; may increase the boot time on some systems and emacs builds, set it to
+   ;; may increase the boot timemu4e-maildir "~/.mail"
+      mu4e-trash-folder "/Trash"
+      mu4e-refile-folder "/Archive" on some systems and emacs builds, set it to
    ;; nil to boost the loading time. (default t)
    dotspacemacs-loading-progress-bar t
    ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)
@@ -294,6 +304,8 @@ in `dotspacemacs/user-config'."
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
+  (setq message-send-mail-function 'message-send-mail-with-sendmail
+        sendmail-program "@msmtp@/bin/msmtp")
   (defun haskell-indentation-advice ()
     (when (and (< 1 (line-number-at-pos))
                (save-excursion

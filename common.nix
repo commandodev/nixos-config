@@ -9,6 +9,8 @@ let
 in
 {
   disabledModules = [ "services/networking/zerotierone.nix" ];
+  boot.blacklistedKernelModules = [ "snd_pcsp" ];
+
   nixpkgs = {
     system = "x86_64-linux";
     overlays = [
@@ -222,7 +224,7 @@ in
   users.extraUsers.ben = {
     name = "ben";
     group = "users";
-    extraGroups = [ "wheel" "vboxusers" "docker" "networkmanager" ];
+    extraGroups = [ "audio" "wheel" "vboxusers" "docker" "networkmanager" ];
     home = "/home/ben";
     shell = pkgs.zsh;
     symlinks = {
@@ -235,7 +237,7 @@ in
       # ".gitconfig" = pkgs.gitconfig;
       ".gnupg/gpg.conf" = pkgs.gnupgconfig.gpgconf;
       ".gnupg/scdaemon.conf" = pkgs.gnupgconfig.scdaemonconf;
-      ".spc" = pkgs.spacemacs.dotSpacemacs;
+      ".spacemacs" = pkgs.spacemacs.dotSpacemacs;
    };
   };
 
