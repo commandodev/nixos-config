@@ -1,3 +1,5 @@
+################################################################################
+# IMAP accounts
 IMAPAccount ben-gmail
 Host imap.gmail.com
 User ben.fordnz@gmail.com
@@ -14,12 +16,29 @@ SSLVersions TLSv1.2
 PassCmd "@lpCli@/bin/lpass show --password auto/perurbis"
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
+IMAPAccount cdodev
+Host imap.gmail.com
+User ben@commandodev.com
+SSLType IMAPS
+SSLVersions TLSv1.2
+PassCmd "@lpCli@/bin/lpass show --password auto/cdodev"
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+
+################################################################################
+# IMAP Stores
 IMAPStore ben-gmail-remote
 Account ben-gmail
 
 IMAPStore perurbis-remote
 Account perurbis
 
+IMAPStore cdodev-remote
+Account cdodev
+
+
+################################################################################
+# Local mail dirs
 MaildirStore ben-gmail-local
 # The trailing "/" is important
 Path ~/.mail/ben-gmail/
@@ -32,20 +51,110 @@ Path ~/.mail/perurbis/
 Inbox ~/.mail/perurbis/Inbox
 SubFolders Verbatim
 
-Channel perurbis
-Master :perurbis-remote:
-Slave :perurbis-local:
-Patterns *
-# Automatically create missing mailboxes, both locally and on the server
-Create Both
-# Save the synchronization state files in the relevant directory
+MaildirStore cdodev-local
+# The trailing "/" is important
+Path ~/.mail/cdodev/
+Inbox ~/.mail/cdodev/Inbox
+SubFolders Verbatim
+
+
+################################################################################
+### Channels
+
+# Gmail
+Channel ben-gmail-all
+Master :ben-gmail-remote:"[Google Mail]/All Mail"
+Slave :ben-gmail-local:archive
+Expunge Both
+Create Slave
 SyncState *
 
 Channel ben-gmail
 Master :ben-gmail-remote:
 Slave :ben-gmail-local:
-Patterns *
+Patterns * !"[Google Mail]*" !sent !archive
+Expunge Both
+Create Both
+SyncState *
+
+Channel ben-gmail-sent
+Master :ben-gmail-remote:"[Google Mail]/Sent Mail"
+Slave :ben-gmail-local:sent
+Expunge Both
+Create Slave
+SyncState *
+
+Channel ben-gmail-all
+Master :ben-gmail-remote:"[Google Mail]/All Mail"
+Slave :ben-gmail-local:archive
+Expunge Both
+Create Slave
+SyncState *
+
+# Perurbis
+Channel perurbis-inboxes
+Master :perurbis-remote:
+Slave :perurbis-local:
+Patterns * !"[Gmail]*"
 # Automatically create missing mailboxes, both locally and on the server
+Expunge Both
 Create Both
 # Save the synchronization state files in the relevant directory
 SyncState *
+
+Channel perurbis-sent
+Master :perurbis-remote:"[Gmail]/Sent Mail"
+Slave :perurbis-local:sent
+Expunge Both
+Create Slave
+SyncState *
+
+Channel perurbis-all
+Master :perurbis-remote:"[Gmail]/All Mail"
+Slave :perurbis-local:archive
+Expunge Both
+Create Slave
+SyncState *
+
+# Cdodev
+Channel cdodev-inboxes
+Master :cdodev-remote:
+Slave :cdodev-local:
+Patterns * !"[Gmail]*"
+# Automatically create missing mailboxes, both locally and on the server
+Expunge Both
+Create Both
+# Save the synchronization state files in the relevant directory
+SyncState *
+
+Channel cdodev-sent
+Master :cdodev-remote:"[Gmail]/Sent Mail"
+Slave :cdodev-local:sent
+Expunge Both
+Create Slave
+SyncState *
+
+Channel cdodev-all
+Master :cdodev-remote:"[Gmail]/All Mail"
+Slave :cdodev-local:archive
+Expunge Both
+Create Slave
+SyncState *
+
+
+################################################################################
+# Groups
+Group gmail
+Channel ben-gmail-sent
+Channel ben-gmail-all
+Channel ben-gmail
+
+Group perurbis
+Channel perurbis-sent
+Channel perurbis-all
+Channel perurbis-inboxes
+
+Group cdodev
+Channel cdodev-sent
+Channel cdodev-all
+Channel cdodev-inboxes
