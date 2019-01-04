@@ -37,13 +37,6 @@ values."
      ;; ----------------------------------------------------------------
      lsp
      hie-nix
-     ;; (haskell :variables
-     ;;          haskell-enable-ghci-ng-support t
-     ;;          ;; haskell-process-type 'dante
-     ;;          haskell-process-type 'cabal-new-repl
-     ;;          ;; haskell-process-args-ghci '()
-     ;;          ;; haskell-process-args-cabal-repl '("--ghc-option=-ferror-spans" "--ghc-option=-fdefer-type-errors")
-     ;;          haskell-enable-hindent-style "chris-done")
      (purescript :variables
                  purescript-enable-rebuild-on-save t
                  purescript-add-import-on-completion nil
@@ -63,10 +56,6 @@ values."
      (org :variables
           org-enable-github-support t
           org-enable-reveal-js t)
-     ;; org
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
      spell-checking
      syntax-checking
      version-control

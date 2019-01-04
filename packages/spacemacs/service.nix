@@ -4,7 +4,7 @@ with lib;
 
 {
   options.programs.spacemacsFontSize = mkOption {
-    default = 25;
+    default = 22;
     type = types.int;
     description = ''
       What font size to set in .spacemacs
