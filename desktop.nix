@@ -31,17 +31,6 @@ in {
 
 imports = [];
 
-nixpkgs.overlays = [
-  (self: super: {
-    polybar = (self.callPackage "/home/ben/dev/nixpkgs/pkgs/applications/misc/polybar" { }).override {
-      githubSupport = true; # https://github.com/jaagr/polybar/issues/647
-      # alsaSupport = true;
-      mpdSupport = true;
-      pulseSupport = true;
-    };
-  })
-];
-
 fonts = {
     enableFontDir = true;
     enableCoreFonts = true; # MS proprietary Core Fonts

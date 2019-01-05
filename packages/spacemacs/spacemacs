@@ -69,13 +69,17 @@ values."
            mu4e-enable-async-operations t
            mu4e-enable-notifications t
            mu4e-maildir "~/.mail"
+           mu4e-mu-binary "@mu@/bin/mu"
+           mu4e-headers-include-related t
            mu4e-drafts-folder "/drafts"
            mu4e-sent-folder "/sent"
            mu4e-sent-messages-behavior 'delete
+           mu4e-show-images t
            mu4e-trash-folder "/trash"
            mu4e-refile-folder "/archive"
-           mu4e-update-interval nil
+           mu4e-update-interval 300
            mu4e-compose-signature-auto-include nil
+           mu4e-use-conversation t
            mu4e-get-mail-command "@isync@/bin/mbsync -a")
      nixos
      yaml
@@ -291,8 +295,6 @@ in `dotspacemacs/user-config'."
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
-  (setq message-send-mail-function 'message-send-mail-with-sendmail
-        sendmail-program "@msmtp@/bin/msmtp")
   (defun haskell-indentation-advice ()
     (when (and (< 1 (line-number-at-pos))
                (save-excursion
@@ -302,48 +304,105 @@ layers configuration. You are free to put any user code."
 
   (advice-add 'haskell-indentation-newline-and-indent
               :after 'haskell-indentation-advice)
-  ;; From https://gist.github.com/sevanspowell/23b0135dae2834e59904a502b8a0eb5d
-  ;; (spacemacs/lsp-bind-keys-for-mode 'haskell-mode)
-  ;; Haskell configuration
-  ;; (require 'lsp-haskell)
 
-  ;; ;; Define a wrapper for the haskell-ide-engine process
-  ;; (setq default-nix-wrapper
-  ;;       (lambda (args)
-  ;;         (append
-  ;;          ;; Change this to match your home directory/preferences
-  ;;          (append (list "nix-shell" "-I" "ssh-config-file=/home/sam/.ssh/nixbuild.config" "--command" )
-  ;;                  (list (mapconcat 'identity args " "))
-  ;;                   )
-  ;;           (list (nix-current-sandbox))
-  ;;           )
-  ;;         )
-  ;;       )
-  ;; (setq haskell-nix-wrapper
-  ;;       (lambda (args)
-  ;;         (apply default-nix-wrapper (list (append args (list "--ghc-option" "-Wwarn"))))
-  ;;         )
-  ;;       )
+  (with-eval-after-load 'mu4e
+    ;; mu4e stuff mostly taken from
+    ;; * https://notanumber.io/2016-10-03/better-email-with-mu4e/
+    ;; * http://cachestocaches.com/2017/3/complete-guide-email-emacs-using-mu-and-/
 
-  ;; ;; Flycheck is for error checking
-  ;; (setq flycheck-command-wrapper-function default-nix-wrapper
-  ;;       flycheck-executable-find
-  ;;       (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd)))
-  ;; ;; Haskell repl session that runs in the background
-  ;; (setq haskell-process-wrapper-function haskell-nix-wrapper)
-  ;; ;; Haskell-ide-engine process
-  ;; (setq lsp-haskell-process-wrapper-function default-nix-wrapper)
+    ;; This is a helper to help determine which account context I am in based 
+    ;; on the folder in my maildir the email (eg. ~/.mail/cdodev) is located in.
+    (defun mu4e-message-maildir-matches (msg rx)
+      (when rx
+        (if (listp rx)
+            ;; If rx is a list, try each one for a match
+            (or (mu4e-message-maildir-matches msg (car rx))
+                (mu4e-message-maildir-matches msg (cdr rx)))
+          ;; Not a list, check rx
+          (string-match rx (mu4e-message-field msg :maildir)))))
 
-  ;; ;; Haskell mode is activated whenever we open a .hs file buffer
-  ;; ;; Load flycheck when we activate haskell mode in a buffer
-  ;; (add-hook 'haskell-mode-hook 'flycheck-mode)
-  ;; ;; Load lsp-haskell when we activate haskell mode in a buffer
-  ;; (add-hook 'haskell-mode-hook #'lsp-haskell-enable)
-  ;; ;; Keep our haskell tags up to date (used for jumping to defn. etc.)
-  ;; (custom-set-variables '(haskell-tags-on-save t))
+    (defun choose-msmtp-account ()
+      (if (message-mail-p)
+        (save-excursion
+          (let*
+              ((from (save-restriction
+                      (message-narrow-to-headers)
+                      (message-fetch-field "from")))
+              (account
+                (cond
+                ((string-match "ben.fordnz@gmail.com" from) "ben-gmail")
+                ((string-match "ben@commandodev.com" from) "cdodev")
+                ((string-match "ben@perurbis.com" from) "perurbis"))))
+            (setq message-sendmail-extra-arguments (list '"-a" account))))))
 
-  ;; (spacemacs/lsp-bind-keys-for-mode 'haskell-mode)
-  )
+    ;; mu4e configuration
+    (setq message-send-mail-function 'message-send-mail-with-sendmail
+        sendmail-program "@msmtp@/bin/msmtp"
+        user-full-name "Ben Ford")
+
+    ;; TODO - not working
+    (add-to-list 'mu4e-view-actions '("View in browser" . mu4e-action-view-in-browser) t)
+
+    ;; Spell checking ftw.
+    (add-hook 'mu4e-compose-mode-hook 'flyspell-mode)
+    ;; This hook correctly modifies the \Inbox and \Starred flags on email when they are marked.
+    ;; Without it refiling (archiving) and flagging (starring) email won't properly result in
+    ;; the corresponding gmail action.
+    (add-hook 'mu4e-mark-execute-pre-hook
+      (lambda (mark msg)
+        (cond ((member mark '(refile trash)) (mu4e-action-retag-message msg "-\\Inbox"))
+              ((equal mark 'flag) (mu4e-action-retag-message msg "\\Starred"))
+              ((equal mark 'unflag) (mu4e-action-retag-message msg "-\\Starred")))))
+
+    ;; Use the correct account context when sending mail based on the from header.
+    (setq message-sendmail-envelope-from 'header)
+    (add-hook 'message-send-mail-hook 'choose-msmtp-account)
+
+    ;; try and make html a bit nicer
+    (setq mu4e-html2text-command "@w3m@/bin/w3m -dump -T text/html -cols 72")
+
+    ;; This sets up my different context for my personal and work emails.
+    (setq mu4e-contexts
+    `( ,(make-mu4e-context
+        :name "ben-gmail"
+        :enter-func (lambda () (mu4e-message "Switch to the ben-gmail context"))
+        :match-func (lambda (msg)
+          (when msg
+            (mu4e-message-maildir-matches msg "^/ben-gmail")))
+        :leave-func (lambda () (mu4e-clear-caches))
+        :vars '((user-mail-address     . "ben.fordnz@gmail.com")
+          (user-full-name        . "Nan Zhong")
+          (mu4e-sent-folder      . "/ben-gmail/sent")
+          ;; (mu4e-drafts-folder    . "/ben-gmail/drafts")
+          ;; (mu4e-trash-folder     . "/ben-gmail/bin")
+          (mu4e-refile-folder    . "/ben-gmail/archive")))
+      ,(make-mu4e-context
+        :name "perurbis"
+        :enter-func (lambda () (mu4e-message "Switch to the perurbis context"))
+        :match-func (lambda (msg)
+                      (when msg
+                        (mu4e-message-maildir-matches msg "^/perurbis")))
+        :leave-func (lambda () (mu4e-clear-caches))
+        :vars '((user-mail-address     . "ben@perurbis.com")
+                (user-full-name        . "Ben Ford")
+                (mu4e-sent-folder      . "/perurbis/sent")
+                ;; (mu4e-drafts-folder    . "/perurbis/drafts")
+                ;; (mu4e-trash-folder     . "/perurbis/bin")
+                (mu4e-refile-folder    . "/perurbis/archive")))
+      ,(make-mu4e-context
+        :name "cdodev"
+        :enter-func (lambda () (mu4e-message "Switch to the cdodev context"))
+        :match-func (lambda (msg)
+          (when msg
+            (mu4e-message-maildir-matches msg "^/cdodev")))
+        :leave-func (lambda () (mu4e-clear-caches))
+        :vars '((user-mail-address     . "ben@commandodev.com")
+          (user-full-name        . "Ben Ford")
+          (mu4e-sent-folder      . "/cdodev/sent")
+          ;; (mu4e-drafts-folder    . "/cdodev/drafts")
+          ;; (mu4e-trash-folder     . "/cdodev/bin")
+          (mu4e-refile-folder    . "/cdodev/archive")))))))
+
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.

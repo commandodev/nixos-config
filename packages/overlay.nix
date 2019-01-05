@@ -29,6 +29,15 @@ in {
   #   };
   # });
 
+  polybar = (self.callPackage "/home/ben/dev/nixpkgs/pkgs/applications/misc/polybar" { }).override {
+    githubSupport = true; # https://github.com/jaagr/polybar/issues/647
+    # alsaSupport = true;
+    mpdSupport = true;
+    pulseSupport = true;
+  };
+
+  mu = (self.callPackage "/home/ben/dev/nixpkgs/pkgs/tools/networking/mu" { withMug = true; });
+
   dunst_config = self.callPackage ./dunst { };
 
   email = self.callPackage ./email { };

@@ -9,7 +9,7 @@ let
 in
 {
   disabledModules = [ "services/networking/zerotierone.nix" ];
-  boot.blacklistedKernelModules = [ "snd_pcsp" ];
+  # boot.blacklistedKernelModules = [ "snd_pcsp" ];
 
   nixpkgs = {
     system = "x86_64-linux";
@@ -19,6 +19,9 @@ in
     config = {
       allowUnfree = true;
       allowBroken = true;
+      permittedInsecurePackages = [
+         "webkitgtk-2.4.11"
+      ];
       firefox = {
         enableGoogleTalkPlugin = true;
         # enableAdobeFlash = true;
@@ -221,7 +224,7 @@ in
   };
 
 
-  users.extraUsers.ben = {
+  users.users.ben = {
     name = "ben";
     group = "users";
     extraGroups = [ "audio" "wheel" "vboxusers" "docker" "networkmanager" ];
