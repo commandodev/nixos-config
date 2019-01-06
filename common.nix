@@ -220,6 +220,10 @@ in
       source-code-pro
       font-awesome-ttf
       siji
+      fira
+      fira-code
+      fira-code-symbols
+      fira-mono
     ];
   };
 
@@ -240,7 +244,7 @@ in
       # ".gitconfig" = pkgs.gitconfig;
       ".gnupg/gpg.conf" = pkgs.gnupgconfig.gpgconf;
       ".gnupg/scdaemon.conf" = pkgs.gnupgconfig.scdaemonconf;
-      ".spacemacs" = pkgs.spacemacs.dotSpacemacs;
+      # ".spacemacs" = pkgs.spacemacs.dotSpacemacs;
    };
   };
 
