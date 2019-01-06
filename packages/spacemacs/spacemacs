@@ -55,6 +55,10 @@ values."
      markdown
      (org :variables
           org-enable-github-support t
+          org-enable-bootstrap-support t
+          org-enable-org-journal-support t
+          org-projectile-file "TODOs.org"
+          org-want-todo-bindings t
           org-enable-reveal-js t)
      spell-checking
      syntax-checking
@@ -401,7 +405,23 @@ layers configuration. You are free to put any user code."
           (mu4e-sent-folder      . "/cdodev/sent")
           ;; (mu4e-drafts-folder    . "/cdodev/drafts")
           ;; (mu4e-trash-folder     . "/cdodev/bin")
-          (mu4e-refile-folder    . "/cdodev/archive")))))))
+          (mu4e-refile-folder    . "/cdodev/archive"))))))
+  (with-eval-after-load 'org
+    (setq org-directory "~/docs/org/")
+    (setq org-agenda-files (list org-directory))
+    (setq org-brain-path "~/docs/org/brain")
+    (setq org-default-notes-file (concat org-directory "inbox.org"))
+    ;; journal
+    (setq org-journal-dir "~/docs/org/journal")
+    (setq org-journal-file-format "%Y-%m-%d")
+    (setq org-journal-enable-agenda-integration t)
+    ;; capture
+    (setq org-refile-targets (quote ((nil :maxlevel . 9)
+                                     (org-agenda-files :maxlevel . 9))))
+    (setq spaceline-org-clock-p t)
+    )
+  )
+
 
 
 ;; Do not write anything past this comment. This is where Emacs will
