@@ -33,7 +33,7 @@ in {
     githubSupport = true; # https://github.com/jaagr/polybar/issues/647
     # alsaSupport = true;
     mpdSupport = true;
-    pulseSupport = true;
+    # pulseSupport = true;
   };
 
   mu = (self.callPackage "/home/ben/dev/nixpkgs/pkgs/tools/networking/mu" { withMug = true; });
@@ -75,7 +75,7 @@ in {
 
   timeout_tcl = self.callPackage ./timeout { };
 
-  volume = self.callPackage ./volume { };
+  # volume = self.callPackage ./volume { };
 
   # zsh-config = self.callPackage ./zsh-config { };
 }

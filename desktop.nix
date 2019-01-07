@@ -76,7 +76,8 @@ services.xserver = {
   };
 
   desktopManager = {
-    default = "none";
+    default = "xfce";
+    xfce.enable = true;
     gnome3 = {
       enable = true;
     };

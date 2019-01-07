@@ -101,7 +101,9 @@ in
     iftop
     iotop
     iptables
+    isync
     networkmanagerapplet
+    msmtp
     mu
     nix-repl
     nox
@@ -127,11 +129,13 @@ in
 
   hardware = {
     u2f.enable = true;
-    pulseaudio = {
-      enable = true;
-      package = pkgs.pulseaudioFull;
-    };
+    # pulseaudio = {
+    #   enable = true;
+    #   package = pkgs.pulseaudioFull;
+    # };
   };
+
+  sound.enable = true;
 
   time.timeZone = "Europe/London";
 
@@ -244,6 +248,7 @@ in
       # ".gitconfig" = pkgs.gitconfig;
       ".gnupg/gpg.conf" = pkgs.gnupgconfig.gpgconf;
       ".gnupg/scdaemon.conf" = pkgs.gnupgconfig.scdaemonconf;
+      ".local/share/applications/org-protocol.desktop" = pkgs.spacemacs.orgProtocolDesktop;
       # ".spacemacs" = pkgs.spacemacs.dotSpacemacs;
    };
   };
