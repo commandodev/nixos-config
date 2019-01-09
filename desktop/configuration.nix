@@ -55,6 +55,8 @@
       graphitePort = 2003;
     };
 
+    syncthing.guiAddress = "10.147.17.21:8384";
+
     graphite = {
       api = {
         enable = true;
