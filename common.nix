@@ -42,7 +42,14 @@ in
     ];
 
   networking = {
+    hosts = {
+      "10.147.17.252" = [ "xps15" ];
+      "10.147.17.21"  = [ "office" ];
+    };
     firewall.allowPing = true;
+    firewall.allowedTCPPorts = [
+      8384 # syncthing ui
+    ];
   };
   nix = {
     binaryCaches = [
@@ -117,6 +124,7 @@ in
     silver-searcher
     terminator
     unison
+    w3m
     wget
   ];
 
