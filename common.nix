@@ -123,6 +123,7 @@ in
     s3cmd
     silver-searcher
     terminator
+    texlive.combined.scheme-full
     unison
     w3m
     wget
