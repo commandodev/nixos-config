@@ -95,7 +95,7 @@ SyncState *
 Channel perurbis-inboxes
 Master :perurbis-remote:
 Slave :perurbis-local:
-Patterns * !"[Gmail]*"
+Patterns * !"[Gmail]*" !sent !archive
 # Automatically create missing mailboxes, both locally and on the server
 Expunge Both
 Create Both
