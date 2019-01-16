@@ -94,6 +94,7 @@ in
     evince
     firefox
     fish
+    gcc
     gitAndTools.gitFull
     gitAndTools.tig
     gnome3.gnome-screenshot
@@ -122,6 +123,7 @@ in
     python27Packages.pygments
     s3cmd
     silver-searcher
+    sqlite
     terminator
     texlive.combined.scheme-full
     unison
