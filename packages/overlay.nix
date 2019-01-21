@@ -38,6 +38,8 @@ in {
 
   mu = (self.callPackage "/home/ben/dev/nixpkgs/pkgs/tools/networking/mu" { withMug = true; });
 
+  hugo = (self.callPackage "/home/ben/dev/nixpkgs/pkgs/applications/misc/hugo" { });
+
   dunst_config = self.callPackage ./dunst { };
 
   email = self.callPackage ./email { };

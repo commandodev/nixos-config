@@ -78,6 +78,8 @@ services.xserver = {
   desktopManager = {
     default = "xfce";
     xfce.enable = true;
+    # xfce.noDesktop = true;
+    xfce.enableXfwm = false;
     gnome3 = {
       enable = true;
     };
@@ -194,8 +196,16 @@ environment.systemPackages = with pkgs; [
 
   # # Icons (Main)
   iconTheme
-
+  xfce.xfwm4-themes
+  xfce.xfce4-cpufreq-plugin
+  xfce.xfce4-cpugraph-plugin
   # # Icons (Fallback)
+  paper-gtk-theme
+  paper-icon-theme
+  adapta-gtk-theme
+  numix-gtk-theme
+  numix-solarized-gtk-theme
+  adapta-backgrounds
   oxygen-icons5
   gnome3.adwaita-icon-theme
   hicolor_icon_theme

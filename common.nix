@@ -106,6 +106,7 @@ in
     haskellPackages.xmonad-contrib
     haskellPackages.xmonad-extras
     htop
+    hugo
     iftop
     iotop
     iptables
@@ -116,6 +117,7 @@ in
     nix-repl
     nox
     oh-my-zsh
+    pavucontrol
     perf-tools
     polkit_gnome
     pstree
@@ -140,13 +142,13 @@ in
 
   hardware = {
     u2f.enable = true;
-    # pulseaudio = {
-    #   enable = true;
-    #   package = pkgs.pulseaudioFull;
-    # };
+    pulseaudio = {
+      enable = true;
+      package = pkgs.pulseaudioFull;
+    };
   };
 
-  sound.enable = true;
+  # sound.enable = true;
 
   time.timeZone = "Europe/London";
 
