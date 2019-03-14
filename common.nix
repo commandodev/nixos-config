@@ -69,6 +69,8 @@ in
     ];
   };
 
+  environment.variables."SSL_CERT_FILE" = "/etc/ssl/certs/ca-bundle.crt";
+  environment.variables."GIT_SSL_CAINFO" = "/etc/ssl/certs/ca-certificates.crt";
   environment.systemPackages = with pkgs; [
     acpi
     acpid
