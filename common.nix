@@ -147,6 +147,15 @@ in
     pulseaudio = {
       enable = true;
       package = pkgs.pulseaudioFull;
+    #   configFile = pkgs.writeText "default.pa" ''
+    #     load-module module-bluetooth-policy
+    #     load-module module-bluetooth-discover
+    #     ## module fails to load with
+    #     ##   module-bluez5-device.c: Failed to get device path from module arguments
+    #     ##   module.c: Failed to load module "module-bluez5-device" (argument: ""): initialization failed.
+    #     # load-module module-bluez5-device
+    #     # load-module module-bluez5-discover
+    #   '';
     };
   };
 
@@ -176,27 +185,27 @@ in
         '';
     };
 
-    postgresql = {
-      enable = true;
-      enableTCPIP = true;
-      package = pkgs.postgresql93;
-      authentication = pkgs.lib.mkForce ''
-        host     all    all    127.0.0.1/32    trust
-        host     all    all    ::1/128         trust
-        host     all    all    0.0.0.0/0       md5
-        local    all    all                    trust
-      '';
-      extraConfig = ''
-        maintenance_work_mem = 64MB
-        checkpoint_segments = 16
-        work_mem = 128MB
-        shared_buffers = 512MB
-        effective_cache_size = 4GB
-        log_statement = all
-        log_line_prefix = '[%p] [%c]: '
-      '';
-      # extraPlugins = [ pkgs.postgis.v_2_1_3 ];
-    };
+    # postgresql = {
+    #   enable = true;
+    #   enableTCPIP = true;
+    #   package = pkgs.postgresql93;
+    #   authentication = pkgs.lib.mkForce ''
+    #     host     all    all    127.0.0.1/32    trust
+    #     host     all    all    ::1/128         trust
+    #     host     all    all    0.0.0.0/0       md5
+    #     local    all    all                    trust
+    #   '';
+    #   extraConfig = ''
+    #     maintenance_work_mem = 64MB
+    #     checkpoint_segments = 16
+    #     work_mem = 128MB
+    #     shared_buffers = 512MB
+    #     effective_cache_size = 4GB
+    #     log_statement = all
+    #     log_line_prefix = '[%p] [%c]: '
+    #   '';
+    #   # extraPlugins = [ pkgs.postgis.v_2_1_3 ];
+    # };
 
 
     # # CUPS printing
@@ -219,6 +228,19 @@ in
       user = "ben";
       dataDir = "/home/ben/syncthing";
       openDefaultPorts = true;
+    };
+
+    kubernetes = {
+      roles = ["master" "node"];
+      addonManager.enable = true;
+      kubelet.extraOpts = "--fail-swap-on=false";
+      flannel.enable = true;
+      proxy.enable = true;
+      addons = {
+        dashboard.enable = true;
+        # dashboard.rbac.enable = false;
+        dns.enable = true;
+      };
     };
 
     zerotierone = {
