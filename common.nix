@@ -57,6 +57,7 @@ in
       http://cache.nixos.org
       http://hydra.nixos.org
       https://hie-nix.cachix.org
+      https://cache.dhall-lang.org
     ];
     extraOptions = ''
       auto-optimise-store = true
@@ -66,6 +67,7 @@ in
       "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "hie-nix.cachix.org-1:EjBSHzF6VmDnzqlldGXbi0RM3HdjfTU3yDRi9Pd0jTY="
+      "cache.dhall-lang.org:I9/H18WHd60olG5GsIjolp7CtepSgJmM2CsO813VTmM="
     ];
   };
 
