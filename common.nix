@@ -268,6 +268,7 @@ in
       fira-code-symbols
       fira-mono
       noto-fonts-emoji
+      roboto
     ];
   };
 
