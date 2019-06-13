@@ -267,6 +267,7 @@ in
       fira-code
       fira-code-symbols
       fira-mono
+      noto-fonts-emoji
     ];
   };
 
@@ -294,6 +295,7 @@ in
 
   virtualisation = {
     docker.enable = true;
+    docker.extraOptions = "--dns 8.8.8.8";
     virtualbox.host.enable = true;
   };
 
