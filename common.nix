@@ -39,6 +39,7 @@ in
     [
       ./desktop.nix
       ./cachix.nix
+      ./packages/keybase.nix
       ./packages/services.nix
       ./packages/zerotierone.nix
       ./multi-glibc-locale-paths.nix
