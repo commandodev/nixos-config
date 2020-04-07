@@ -76,8 +76,8 @@ services.xserver = {
   };
 
   desktopManager = {
-    default = "xfce";
-    xfce.enable = true;
+    default = "none";
+    xfce.enable = false;
     # xfce.noDesktop = true;
     xfce.enableXfwm = false;
     gnome3 = {
@@ -90,6 +90,7 @@ services.xserver = {
    autoLogin = {
      enable = true;
      user = "ben";
+     timeout = 10;
    };
   };
   # videoDrivers = [ "nvidia" ];
@@ -162,6 +163,7 @@ environment.systemPackages = with pkgs; [
   dunst
   fontconfig
   konsole
+  rofi
   polybar
   libnotify
   xfontsel
@@ -169,6 +171,7 @@ environment.systemPackages = with pkgs; [
   xss-lock
   xsel
   unclutter
+  zoom-us
 
   compton
   nitrogen # better multihead support than feh
@@ -185,6 +188,9 @@ environment.systemPackages = with pkgs; [
   xlibs.xrandr
   xlibs.xrdb
   xlibs.xprop
+
+  # desktop apps
+  nixnote2
 
   # # GTK theme
   breeze-gtk
@@ -212,7 +218,8 @@ environment.systemPackages = with pkgs; [
 
   # These packages are used in autostart, they need to in systemPackages
   # or icons won't work correctly
-  pythonPackages.udiskie connman-notify # skype
+  # pythonPackages.udiskie
+  connman-notify # skype
 
 ];
 

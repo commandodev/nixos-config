@@ -29,14 +29,14 @@ in {
   #   };
   # });
 
-  polybar = (self.callPackage "/home/ben/dev/nixpkgs/pkgs/applications/misc/polybar" { }).override {
-    githubSupport = true; # https://github.com/jaagr/polybar/issues/647
-    # alsaSupport = true;
-    mpdSupport = true;
-    # pulseSupport = true;
-  };
+  # polybar = (self.callPackage "/home/ben/dev/nixpkgs/pkgs/applications/misc/polybar" { }).override {
+  #   githubSupport = true; # https://github.com/jaagr/polybar/issues/647
+  #   # alsaSupport = true;
+  #   mpdSupport = true;
+  #   # pulseSupport = true;
+  # };
 
-  mu = (self.callPackage "/home/ben/dev/nixpkgs/pkgs/tools/networking/mu" { withMug = true; });
+  # mu = (self.callPackage "/home/ben/dev/nixpkgs/pkgs/tools/networking/mu" { withMug = true; });
 
   # TODO: fix this
   # hugo = (self.callPackage "/home/ben/dev/nixpkgs/pkgs/applications/misc/hugo" { });

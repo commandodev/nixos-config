@@ -6,6 +6,7 @@
 
 let
   secrets = import ./secrets.nix;
+  all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
 in
 {
   disabledModules = [ "services/networking/zerotierone.nix" ];
@@ -27,18 +28,20 @@ in
         # enableAdobeFlash = true;
       };
 
-      chromium = {
+      # chromium = {
         # enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
-        enablePepperPDF = true;
-      };
+      #   enablePepperPDF = true;
+      # };
     };
 
   };
   imports =
     [
       ./desktop.nix
+      ./cachix.nix
       ./packages/services.nix
       ./packages/zerotierone.nix
+      ./multi-glibc-locale-paths.nix
     ];
 
   networking = {
@@ -53,18 +56,15 @@ in
   };
   nix = {
     binaryCaches = [
-      http://hydra.iohk.io
-      http://cache.nixos.org
-      http://hydra.nixos.org
+      https://cache.nixos.org
       https://hie-nix.cachix.org
       https://cache.dhall-lang.org
     ];
     extraOptions = ''
       auto-optimise-store = true
     '';
-    trustedBinaryCaches = [ http://hydra.iohk.io http://hydra.nixos.org ];
+    trustedBinaryCaches = [ https://hydra.nixos.org ];
     binaryCachePublicKeys = [
-      "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "hie-nix.cachix.org-1:EjBSHzF6VmDnzqlldGXbi0RM3HdjfTU3yDRi9Pd0jTY="
       "cache.dhall-lang.org:I9/H18WHd60olG5GsIjolp7CtepSgJmM2CsO813VTmM="
@@ -104,6 +104,7 @@ in
     gnome3.gnome-screenshot
     google-chrome
     gnumake
+    (all-hies.selection { selector = p: { inherit (p) ghc864 ghc882; }; })
     haskellPackages.ghc
     haskellPackages.xmonad
     haskellPackages.xmonad
@@ -118,7 +119,6 @@ in
     networkmanagerapplet
     msmtp
     mu
-    nix-repl
     nox
     oh-my-zsh
     pavucontrol
@@ -163,6 +163,10 @@ in
 
   # sound.enable = true;
 
+  location = {
+    latitude = 51.5072;
+    longitude = 0.1275;
+  };
   time.timeZone = "Europe/London";
 
   programs = {
@@ -179,6 +183,9 @@ in
     locate.enable = true;
     fprintd.enable = true; # finger-print daemon and PAM module
     keybase.enable = true;
+
+    # Might need this later
+    # hercules-ci-agent.patchNix = true;
 
     acpid = {
       enable = true;
@@ -218,8 +225,6 @@ in
 
     redshift = {
        enable = true;
-       latitude = "51.5072";
-       longitude = "0.1275";
        temperature = {
          night = 4000;
        };
@@ -232,18 +237,18 @@ in
       openDefaultPorts = true;
     };
 
-    kubernetes = {
-      roles = ["master" "node"];
-      addonManager.enable = true;
-      kubelet.extraOpts = "--fail-swap-on=false";
-      flannel.enable = true;
-      proxy.enable = true;
-      addons = {
-        dashboard.enable = true;
-        # dashboard.rbac.enable = false;
-        dns.enable = true;
-      };
-    };
+    # kubernetes = {
+    #   roles = ["master" "node"];
+    #   addonManager.enable = true;
+    #   kubelet.extraOpts = "--fail-swap-on=false";
+    #   flannel.enable = true;
+    #   proxy.enable = true;
+    #   addons = {
+    #     dashboard.enable = true;
+    #     # dashboard.rbac.enable = false;
+    #     dns.enable = true;
+    #   };
+    # };
 
     zerotierone = {
       enable = true;
@@ -260,6 +265,9 @@ in
       # corefonts  # Micrsoft free fonts
       inconsolata  # monospaced
       ubuntu_font_family  # Ubuntu fonts
+      roboto
+      roboto-mono
+      roboto-slab
       source-code-pro
       font-awesome-ttf
       siji
