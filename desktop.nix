@@ -33,7 +33,6 @@ imports = [];
 
 fonts = {
     enableFontDir = true;
-    enableCoreFonts = true; # MS proprietary Core Fonts
     enableGhostscriptFonts = true;
     fonts = [
        pkgs.corefonts
@@ -47,12 +46,14 @@ fonts = {
     ];
     fontconfig = {
       enable = true;
+      dpi = 210;
       defaultFonts.monospace = [ "Consolas" ];
     };
   };
 
 services.accounts-daemon.enable = true; # needed by lightdm
 
+hardware.opengl.driSupport32Bit = true;
 
 # Enable the X11 windowing system.
 services.xserver = {
@@ -62,8 +63,8 @@ services.xserver = {
   autorun = true;
   exportConfiguration = true;
   xkbOptions = "eurosign:e";
+  # videoDrivers = [ "nvidia" ];
   windowManager = {
-    default = "xmonad";
     xmonad = {
       enable = true;
       enableContribAndExtras = true;
@@ -76,7 +77,6 @@ services.xserver = {
   };
 
   desktopManager = {
-    default = "none";
     xfce.enable = false;
     # xfce.noDesktop = true;
     xfce.enableXfwm = false;
@@ -85,48 +85,56 @@ services.xserver = {
     };
   };
 
-  displayManager.lightdm = {
-   enable = true;
-   autoLogin = {
-     enable = true;
-     user = "ben";
-     timeout = 10;
-   };
+  displayManager = {
+    defaultSession = "none+xmonad";
+    lightdm = {
+      enable = true;
+      autoLogin = {
+        enable = true;
+        user = "ben";
+        timeout = 10;
+      };
+      # autoLogin.timeout = 10;
+      greeters.gtk.cursorTheme = {
+        name = "Vanilla-DMZ";
+        package = pkgs.vanilla-dmz;
+        size = 64;
+      };
   };
-  # videoDrivers = [ "nvidia" ];
   # videoDrivers = [ "nouveau" ];
 
-  displayManager.sessionCommands = ''
-     ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
+    sessionCommands = ''
+      ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
 
-     ${pkgs.xlibs.xrdb}/bin/xrdb -merge ~/.Xresources
-     # ${pkgs.xlibs.xrdb}/bin/xrdb -merge /etc/X11/Xresources
+      ${pkgs.xlibs.xrdb}/bin/xrdb -merge ~/.Xresources
+      # ${pkgs.xlibs.xrdb}/bin/xrdb -merge /etc/X11/Xresources
 
-     [ -f ~/.Xmodmap ] && xmodmap ~/.Xmodmap
+      [ -f ~/.Xmodmap ] && xmodmap ~/.Xmodmap
 
-     # background image - nitrogen has better multihead support than feh
-     ${pkgs.nitrogen}/bin/nitrogen --restore
+      # background image - nitrogen has better multihead support than feh
+      ${pkgs.nitrogen}/bin/nitrogen --restore
 
-     # Subscribes to the systemd events and invokes i3lock.
-     # Send notification after 10 mins of inactivity,
-     # lock the screen 10 seconds later.
-     # TODO nixify xss-lock scripts
-     ${pkgs.xlibs.xset}/bin/xset s 600 10
-     ${pkgs.xss-lock}/bin/xss-lock -n ~/bin/lock-notify.sh -- ~/bin/lock.sh &
+      # Subscribes to the systemd events and invokes i3lock.
+      # Send notification after 10 mins of inactivity,
+      # lock the screen 10 seconds later.
+      # TODO nixify xss-lock scripts
+      ${pkgs.xlibs.xset}/bin/xset s 600 10
+      ${pkgs.xss-lock}/bin/xss-lock -n ~/bin/lock-notify.sh -- ~/bin/lock.sh &
 
-     # disable PC speaker beep
-     # ${pkgs.xlibs.xset}/bin/xset -b
+      # disable PC speaker beep
+      # ${pkgs.xlibs.xset}/bin/xset -b
 
-     # gpg-agent for X session
-     gpg-connect-agent /bye
-     GPG_TTY=$(tty)
-     export GPG_TTY
+      # gpg-agent for X session
+      gpg-connect-agent /bye
+      GPG_TTY=$(tty)
+      export GPG_TTY
 
-     # use gpg-agent for SSH
-     # NOTE: make sure enable-ssh-support is included in ~/.gnupg/gpg-agent.conf
-     unset SSH_AGENT_PID
-     export SSH_AUTH_SOCK="/run/user/1000/gnupg/S.gpg-agent.ssh"
-  '';
+      # use gpg-agent for SSH
+      # NOTE: make sure enable-ssh-support is included in ~/.gnupg/gpg-agent.conf
+      unset SSH_AGENT_PID
+      export SSH_AUTH_SOCK="/run/user/1000/gnupg/S.gpg-agent.ssh"
+    '';
+  };
 };
 
 environment.extraInit = ''
@@ -173,9 +181,12 @@ environment.systemPackages = with pkgs; [
   unclutter
   zoom-us
 
+  ffmpeg-full
+  gphoto2
+  obs-studio
+
   compton
   nitrogen # better multihead support than feh
-  pinentry_qt4
 
   xlibs.xbacklight
   xlibs.xmodmap
@@ -221,6 +232,9 @@ environment.systemPackages = with pkgs; [
   # pythonPackages.udiskie
   connman-notify # skype
 
+  steam
+  steam-run-native
+
 ];
 
 # Make applications find files in <prefix>/share
@@ -236,5 +250,4 @@ services.udev = {
     '';
  };
 sound.mediaKeys.enable = true;
-
 }

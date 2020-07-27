@@ -14,7 +14,7 @@
       ./common.nix
     ];
 
-  boot.kernelPackages = pkgs.linuxPackages_testing;
+  boot.kernelPackages = pkgs.linuxPackages;
   # # Use the systemd-boot EFI boot loader.
   boot.kernelParams = [ "acpi_rev_override=1" "pcie_aspm=off" "nouveau.modeset=0" ];
   boot.loader = {
@@ -24,10 +24,10 @@
 
   hardware.bluetooth = {
     enable = true;
-    extraConfig = "
-      [General]
-      Enable=Source,Sink,Media,Socket
-    ";
+    # config = "
+    #   [General]
+    #   Enable=Source,Sink,Media,Socket
+    # ";
 
   };
 
@@ -41,7 +41,14 @@
     enableIPv6 = false;
     # connman.enable = true;
     networkmanager.enable = true;
+    nameservers = ["8.8.8.8" "8.8.4.4"];
 
+  };
+
+  environment.variables = {
+    GDK_SCALE = "2";
+    GDK_DPI_SCALE = "0.5";
+    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
   };
 
   services = {
@@ -53,6 +60,7 @@
     '';
 
     xserver = {
+      dpi = 210;
       libinput = {
         enable = true;
         disableWhileTyping = true;

@@ -10,7 +10,10 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
   boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
+  boot.extraModprobeConfig = ''
+    options v4l2loopback exclusive_caps=1 video_nr=4 card_label=m50 max_buffers=2
+'';
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/a74e77cd-0973-44b3-b518-dd4bd5c0f00b";

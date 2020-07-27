@@ -6,7 +6,8 @@
 
 let
   secrets = import ./secrets.nix;
-  all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
+  # all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
+  # ghcide = (import (builtins.fetchTarball "https://github.com/cachix/ghcide-nix/tarball/master") {}).ghcide-ghc865;
 in
 {
   disabledModules = [ "services/networking/zerotierone.nix" ];
@@ -23,10 +24,10 @@ in
       permittedInsecurePackages = [
          "webkitgtk-2.4.11"
       ];
-      firefox = {
-        enableGoogleTalkPlugin = true;
-        # enableAdobeFlash = true;
-      };
+      # firefox = {
+      #   enableGoogleTalkPlugin = true;
+      #   # enableAdobeFlash = true;
+      # };
 
       # chromium = {
         # enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
@@ -92,6 +93,7 @@ in
     dbus
     diffstat
     diffutils
+    direnv
     dmenu
     docker
     dos2unix
@@ -105,7 +107,8 @@ in
     gnome3.gnome-screenshot
     google-chrome
     gnumake
-    (all-hies.selection { selector = p: { inherit (p) ghc864 ghc882; }; })
+    # (all-hies.selection { selector = p: { inherit (p) ghc865 ghc882; }; })
+    # ghcide
     haskellPackages.ghc
     haskellPackages.xmonad
     haskellPackages.xmonad
@@ -132,7 +135,7 @@ in
     silver-searcher
     sqlite
     terminator
-    texlive.combined.scheme-full
+    # texlive.combined.scheme-full
     unison
     w3m
     wget
@@ -140,13 +143,13 @@ in
 
   # Select internationalisation properties.
   i18n = {
-    consoleFont = "lat9w-16";
-    consoleKeyMap = "uk";
     defaultLocale = "en_GB.UTF-8";
   };
 
+  console.font = "lat9w-16";
+  console.keyMap = "uk";
+
   hardware = {
-    u2f.enable = true;
     pulseaudio = {
       enable = true;
       package = pkgs.pulseaudioFull;
@@ -184,6 +187,7 @@ in
     locate.enable = true;
     fprintd.enable = true; # finger-print daemon and PAM module
     keybase.enable = true;
+    lorri.enable = true;
 
     # Might need this later
     # hercules-ci-agent.patchNix = true;
@@ -253,7 +257,7 @@ in
 
     zerotierone = {
       enable = true;
-      package = pkgs.callPackage "/home/ben/dev/nixpkgs/pkgs/tools/networking/zerotierone" {};
+      # package = pkgs.callPackage "/home/ben/dev/nixpkgs/pkgs/tools/networking/zerotierone" {};
       joinNetworks = secrets.ztNetworks;
     };
   };
@@ -313,6 +317,6 @@ in
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "18.03"; # Did you read the comment?
+  system.stateVersion = "20.03"; # Did you read the comment?
 
 }
